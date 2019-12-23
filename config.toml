@@ -1,0 +1,20 @@
+[Main]
+Foo='Bar'
+
+[Command_options]
+Timeout = 10
+
+[Output]
+Separator = ': '
+
+[Image]
+Type='None'
+
+[Info]
+Architecture = ['uname', '-m']
+Kernel = ['uname', '-sr']
+Operating_System = ['uname', '-o']
+Distribution = 'echo "`lsb_release -ds | tr -d \\"` `lsb_release -rs`"'
+Desktop_Environment = 'xfce4-session --version | grep -o "(X.*)" | tr -d "()"'
+Terminal_Emulator = 'echo "QTerminal `qterminal --version 2>/dev/null`"'
+Shell = ['fish', '--version']
