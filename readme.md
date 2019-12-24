@@ -1,5 +1,12 @@
 # Wraith
 
+**Wraith** is a fetch-like program. It's objective is to show system information
+mostly for screenshots.
+
+Created for learning purposes.
+
+## Etymology
+
 > fetch (n.1)
 >
 > "apparition of a living person, specter, a double," 1787, an English dialect
@@ -15,7 +22,11 @@
 >
 > from <https://www.etymonline.com/word/fetch> *(emphasis mine)*
 
-**Wraith** is a fetch-like program. It's objective is to show system information
-mostly for screen shot purposes.
+## Known bugs
 
-Created mostly for learning purposes.
+* TOML Parser (external) has trouble handling triple quoted strings;
+
+* `output.py` can not calculate correctly the length of strings with escape
+codes;
+
+* Still plenty of missing features.
