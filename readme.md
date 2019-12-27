@@ -26,7 +26,4 @@ Created for learning purposes.
 
 * TOML Parser (external) has trouble handling triple quoted strings;
 
-* `output.py` can not calculate correctly the length of strings with escape
-codes;
-
 * Still plenty of missing features.

@@ -10,16 +10,12 @@ import run_commands
 import image
 import output
 
-# Refactoring to make this modular
-
 config = load_conf.load ('config.toml')
 
 info = run_commands.run (config)
 
 output.show (config, info)
 
-# TODO: Read TOML configs
+# TODO:
 #       Define config-file structure
 #       Display pixel art image
-#       Fetch system info on parallel
-#       Display system info
