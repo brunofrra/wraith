@@ -12,11 +12,19 @@ Type='None'
 
 [Info]
 Architecture = ['uname', '-m']
+
+Hardware_OS_Separator = 1
 Kernel = ['uname', '-sr']
 Operating_System = ['uname', '-o']
 Distribution = 'echo "`lsb_release -ds | tr -d \\"` `lsb_release -rs`"'
+
+OS_GUI_Separator = 1
 Display_Server = ['pacman', '-Q', 'xorg-server']
 Desktop_Environment = 'xfce4-session --version | grep -o "(X.*)" | tr -d "()"'
+
+GUI_Terminal_Separator = 1
 Terminal_Emulator = 'echo "QTerminal `qterminal --version 2>/dev/null`"'
 Shell = ['fish', '--version']
+
+Extras_Separator = 1
 Colors = ['echo', '-e', '\e[1;30;40m▄\e[31;41m▄\e[33;43m▄\e[32;42m▄\e[36;46m▄\e[34;44m▄\e[35;45m▄\e[37;47m▄\e[0m']

@@ -14,6 +14,10 @@ def show (config, info):
         if len (clean_i1) > max_size_1:
             max_size_1 = len (clean_i1)
     for i in info:
+        if i[0] == '':
+            separator = ' ' * len (config['Output']['Separator'])
+        else:
+            separator = config['Output']['Separator']
         clean_i1 = ansi_escape.sub ('', i[1])
         pad1 = ' ' * (max_size_1 - len (clean_i1))
         print ('x{pre}{info: >{size0}}{sep}{mid}{out}{pad}{post}x'.format
@@ -23,6 +27,6 @@ def show (config, info):
                 pad = pad1,
                 post = '\033[0m', # Remove this, add actual color support
                 pre = '\033[0;34m', # Remove this, add actual color support
-                sep = config['Output']['Separator'],
+                sep = separator,
                 size0 = max_size_0,
                 ))#size = max_info))
