@@ -3,9 +3,11 @@
 **Wraith** is a fetch-like program. It's objective is to show system information
 mostly for screenshots.
 
-Created for learning purposes.
+Inspired by <https://github.com/terroo/myfetch>. Created for learning purposes.
 
 ## Etymology
+
+From <https://www.etymonline.com/word/fetch> (*emphasis mine*):
 
 > fetch (n.1)
 >
@@ -19,11 +21,9 @@ Created for learning purposes.
 > > appearance shortly before the death of the person it represents, either to
 > > himself or his friends, or both. [Lewis Spence, "An Encyclopedia of
 > > Occultism," 1920]
->
-> from <https://www.etymonline.com/word/fetch> *(emphasis mine)*
 
 ## Known bugs
 
 * TOML Parser (external) has trouble handling triple quoted strings;
 
-* Still plenty of missing features.
+* Still plenty of missing features, most notably, the image.

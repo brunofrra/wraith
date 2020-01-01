@@ -6,6 +6,7 @@ import subprocess
 
 def run (config):
     ret = []
+    err = []
     for i in config['Info']:
         if isinstance (config['Info'][i], str):
             use_shell = True
@@ -16,18 +17,24 @@ def run (config):
                 ret.append (('', ''))
             continue
         else:
-            # TODO Handle more gracefully
-            print ('Error on input {}'.format (i))
+            err.append ("Invalid command '{}'".format (i))
             continue
         # Left hand side
         lhs = i.replace ('_', ' ')
-        if lhs[0] == ' ': lhs = ''
+        if lhs[0] == ' ':
+            if lhs[-1] == ' ': lhs = '_centered_'
+            else: lhs = ''
         # Right hand side
-        out = (subprocess.run (config['Info'][i],
-                capture_output = True,
-                check = True,
-                shell = use_shell,
-                timeout = config['Command_options']['Timeout'])
-                .stdout.decode ('utf-8')[:-1])
-        ret.append ((lhs, out))
-    return ret
+        try:
+            out = (subprocess.run (config['Info'][i],
+                    capture_output = True,
+                    check = True,
+                    shell = use_shell,
+                    timeout = config['Command_options']['Timeout'])
+                    .stdout.decode ('utf-8')[:-1])
+            ret.append ((lhs, out))
+        except subprocess.CalledProcessError:
+            err.append ("Command '{}' returned a non-success code".format (i))
+        except subprocess.TimeoutExpired:
+            err.append ("Command '{}' not done after timeout".format (i))
+    return ret, err

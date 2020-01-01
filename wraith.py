@@ -10,9 +10,12 @@ import run_commands
 import image
 import output
 
-config = load_conf.load ('config.toml')
+conf_file = 'config.toml'
+#conf_file = 'terroo.toml'
 
-info = run_commands.run (config)
+config = load_conf.load (conf_file)
+
+info, err = run_commands.run (config)
 
 output.show (config, info)
 

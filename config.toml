@@ -11,6 +11,7 @@ Separator = ': '
 Type='None'
 
 [Info]
+#_centered_test_ = ['echo', '1234567890 1234567890 1234567890 0987654321 0987654321 0987654321']
 Architecture = ['uname', '-m']
 
 Hardware_OS_Separator = 1
@@ -27,4 +28,4 @@ Terminal_Emulator = 'echo "QTerminal `qterminal --version 2>/dev/null`"'
 Shell = ['fish', '--version']
 
 Extras_Separator = 1
-Colors = ['echo', '-e', '\e[1;30;40m▄\e[31;41m▄\e[33;43m▄\e[32;42m▄\e[36;46m▄\e[34;44m▄\e[35;45m▄\e[37;47m▄\e[0m']
+_Colors_ = ['echo', '-e', '\e[1;30;40m▄\e[31;41m▄\e[33;43m▄\e[32;42m▄\e[36;46m▄\e[34;44m▄\e[35;45m▄\e[37;47m▄\e[0m']
