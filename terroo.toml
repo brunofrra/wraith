@@ -17,7 +17,7 @@ Type='None'
 
 [Info]
 _Title = 'echo $USER@$HOSTNAME'
-_qtd = 'echo $USER@$HOSTNAME | tr [:print:] -' # Known-bug: parser does not recognize unicode escapes \u2500
+_qtd = 'echo $USER@$HOSTNAME | sed "s/./\xe2\x94\x80/g"'
 #Distro = "cat /proc/version | egrep -o '\\([A-Z][a-z]+ ' | tr -d \\("
 Distro = "lsb_release -d | sed 's/.*:\\s*//g'"
 OS = ['uname', '-o']
@@ -31,5 +31,5 @@ Font = "fc-match | sed 's/\\..*//g'"
 CPU = "cat /proc/cpuinfo | grep -o 'model name.*' | sed -n 1p | sed 's/.*:.//g;s/(.*)//g'"
 RAM = "echo `echo \"\\`cat /proc/meminfo | sed -n 1p | tr -d [A-Za-z:' '\\` / 1000000\" | bc` MB"
 Mem_Free = "echo `echo \"scale=2;\\`cat /proc/meminfo | sed -n 2p | tr -d [A-Za-z:' '\\` / 1000000\" | bc` MB"
-Architeture = "echo `getconf LONG_BIT`-bit"
+Architecture = "echo `getconf LONG_BIT`-bit"
 Browser_default = "echo `xdg-settings get default-web-browser | sed 's/userapp-//g;s/-.*//g;s/\\..*//g'` | sed 's/./\\u&/'"

@@ -15,10 +15,9 @@ conf_file = 'config.toml'
 
 config = load_conf.load (conf_file)
 
-info, err = run_commands.run (config)
+info = run_commands.run (config)
 
 output.show (config, info)
 
 # TODO:
-#       Define config-file structure
-#       Display pixel art image
+#   Handle errors

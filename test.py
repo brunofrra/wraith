@@ -4,68 +4,82 @@ import unittest
 
 class TestRunCommands (unittest.TestCase):
 
+    def testMultiLineCommand (self):
+        config = {'Command_options': {'Timeout': 10},
+                'Info': {'lhs': ['printf', 'foo\nbar\n']}}
+        returned = run_commands.run (config)
+        expected = run_commands.CommandOutput (**{'out':
+                [('lhs', 'foo', 3), ('', 'bar', 3)]})
+        self.assertEqual (returned, expected)
+
     def testCommandFail (self):
         config = {'Command_options': {'Timeout': 10},
                 'Info': {'lhs': ['false']}}
-        ret, err = run_commands.run (config)
-        self.assertEqual (ret, [])
-        self.assertEqual (err, ["Command 'lhs' returned a non-success code"])
+        returned = run_commands.run (config)
+        expected = run_commands.CommandOutput (**{'err': [(
+                "Command 'lhs' returned a non-success code")]})
+        self.assertEqual (returned, expected)
 
     def testCommandTimeout (self):
-        config = {'Command_options': {'Timeout': 1},
+        config = {'Command_options': {'Timeout': 0.1},
                 'Info': {'lhs': ['sleep', '2']}}
-        ret, err = run_commands.run (config)
-        self.assertEqual (ret, [])
-        self.assertEqual (err, ["Command 'lhs' not done after timeout"])
+        returned = run_commands.run (config)
+        expected = run_commands.CommandOutput (**{'err': [(
+                "Command 'lhs' not done after timeout")]})
+        self.assertEqual (returned, expected)
 
     def testIntCommand (self):
         config = {'Command_options': {'Timeout': 10},
                 'Info': {'lhs': 2}}
-        ret, err = run_commands.run (config)
-        self.assertEqual (ret, [('', ''), ('', '')])
-        self.assertEqual (err, [])
+        returned = run_commands.run (config)
+        expected = run_commands.CommandOutput (**{'out': [(''), ('')]})
+        self.assertEqual (returned, expected)
     
     def testCenteredOutput (self):
         config = {'Command_options': {'Timeout': 10},
                 'Info': {'_centered_output_': ['echo', 'rhs']}}
-        ret, err = run_commands.run (config)
-        self.assertEqual (ret, [('_centered_', 'rhs')])
-        self.assertEqual (err, [])
+        returned = run_commands.run (config)
+        expected = run_commands.CommandOutput (**{'out':
+                [('_centered_', 'rhs', 3)]})
+        self.assertEqual (returned, expected)
 
     def testNoLhs (self):
         config = {'Command_options': {'Timeout': 10},
                 'Info': {'_no_lhs': ['echo', 'rhs']}}
-        ret, err = run_commands.run (config)
-        self.assertEqual (ret, [('', 'rhs')])
-        self.assertEqual (err, [])
+        returned = run_commands.run (config)
+        expected = run_commands.CommandOutput (**{'out': [('', 'rhs', 3)]})
+        self.assertEqual (returned, expected)
     
     def testUnderscoreToSpace (self):
         config = {'Command_options': {'Timeout': 10},
                 'Info': {'Replace_underscore': ['echo', 'rhs']}}
-        ret, err = run_commands.run (config)
-        self.assertEqual (ret, [('Replace underscore', 'rhs')])
-        self.assertEqual (err, [])
+        returned = run_commands.run (config)
+        expected = run_commands.CommandOutput (**{'out':
+                [('Replace underscore', 'rhs', 3)]})
+        self.assertEqual (returned, expected)
 
     def testListCommand (self):
         config = {'Command_options': {'Timeout': 10},
                 'Info': {'lhs': ['echo', 'rhs']}}
-        ret, err = run_commands.run (config)
-        self.assertEqual (ret, [('lhs', 'rhs')])
-        self.assertEqual (err, [])
+        returned = run_commands.run (config)
+        expected = run_commands.CommandOutput (**{'out': [('lhs', 'rhs', 3)]})
+        self.assertEqual (returned, expected)
 
     def testStringCommand (self):
         config = {'Command_options': {'Timeout': 10},
                 'Info': {'lhs': 'echo rhs'}}
-        ret, err = run_commands.run (config)
-        self.assertEqual (ret, [('lhs', 'rhs')])
-        self.assertEqual (err, [])
+        returned = run_commands.run (config)
+        expected = run_commands.CommandOutput (**{'out': [('lhs', 'rhs', 3)]})
+        self.assertEqual (returned, expected)
 
     def testTwoCommands (self):
         config = {'Command_options': {'Timeout': 10},
                 'Info': {'zFirst': 'echo rhs1', 'aLast': ['echo', 'rhs2']}}
-        ret, err = run_commands.run (config)
-        self.assertEqual (ret, [('zFirst', 'rhs1'), ('aLast', 'rhs2')])
-        self.assertEqual (err, [])
+        returned = run_commands.run (config)
+        expected = run_commands.CommandOutput (**{'out':
+                [('zFirst', 'rhs1', 4),
+                 ('aLast', 'rhs2', 4)]})
+        self.assertEqual (returned, expected)
 
 if __name__ == '__main__':
     unittest.main ()
