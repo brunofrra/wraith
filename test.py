@@ -4,12 +4,13 @@ import unittest
 
 class TestRunCommands (unittest.TestCase):
 
-    def testMultiLineCommand (self):
+    def testCenteredOutput (self):
         config = {'Command_options': {'Timeout': 10},
-                'Info': {'lhs': ['printf', 'foo\nbar\n']}}
+                'Info': {'_centered_output_': ['echo', 'rhs']}}
         returned = run_commands.run (config)
         expected = run_commands.CommandOutput (**{'out':
-                [('lhs', 'foo', 3), ('', 'bar', 3)]})
+                [('_centered_', 'rhs', 3)],
+                'max_rhs': 3})
         self.assertEqual (returned, expected)
 
     def testCommandFail (self):
@@ -32,44 +33,41 @@ class TestRunCommands (unittest.TestCase):
         config = {'Command_options': {'Timeout': 10},
                 'Info': {'lhs': 2}}
         returned = run_commands.run (config)
-        expected = run_commands.CommandOutput (**{'out': [(''), ('')]})
+        expected = run_commands.CommandOutput (**{'out':
+                [('', '', 0), ('', '', 0)]})
         self.assertEqual (returned, expected)
     
-    def testCenteredOutput (self):
+    def testListCommand (self):
         config = {'Command_options': {'Timeout': 10},
-                'Info': {'_centered_output_': ['echo', 'rhs']}}
+                'Info': {'lhs': ['echo', 'rhs']}}
+        returned = run_commands.run (config)
+        expected = run_commands.CommandOutput (**{'out': [('lhs', 'rhs', 3)],
+                'max_lhs': 3, 'max_rhs': 3})
+        self.assertEqual (returned, expected)
+
+    def testMultiLineCommand (self):
+        config = {'Command_options': {'Timeout': 10},
+                'Info': {'lhs': ['printf', 'foo\nbar']}}
         returned = run_commands.run (config)
         expected = run_commands.CommandOutput (**{'out':
-                [('_centered_', 'rhs', 3)]})
+                [('lhs', 'foo', 3), ('', 'bar', 3)],
+                'max_lhs': 3, 'max_rhs': 3})
         self.assertEqual (returned, expected)
 
     def testNoLhs (self):
         config = {'Command_options': {'Timeout': 10},
                 'Info': {'_no_lhs': ['echo', 'rhs']}}
         returned = run_commands.run (config)
-        expected = run_commands.CommandOutput (**{'out': [('', 'rhs', 3)]})
+        expected = run_commands.CommandOutput (**{'out': [('', 'rhs', 3)],
+                'max_lhs': 0, 'max_rhs': 3})
         self.assertEqual (returned, expected)
     
-    def testUnderscoreToSpace (self):
-        config = {'Command_options': {'Timeout': 10},
-                'Info': {'Replace_underscore': ['echo', 'rhs']}}
-        returned = run_commands.run (config)
-        expected = run_commands.CommandOutput (**{'out':
-                [('Replace underscore', 'rhs', 3)]})
-        self.assertEqual (returned, expected)
-
-    def testListCommand (self):
-        config = {'Command_options': {'Timeout': 10},
-                'Info': {'lhs': ['echo', 'rhs']}}
-        returned = run_commands.run (config)
-        expected = run_commands.CommandOutput (**{'out': [('lhs', 'rhs', 3)]})
-        self.assertEqual (returned, expected)
-
     def testStringCommand (self):
         config = {'Command_options': {'Timeout': 10},
                 'Info': {'lhs': 'echo rhs'}}
         returned = run_commands.run (config)
-        expected = run_commands.CommandOutput (**{'out': [('lhs', 'rhs', 3)]})
+        expected = run_commands.CommandOutput (**{'out': [('lhs', 'rhs', 3)],
+                'max_lhs': 3, 'max_rhs': 3})
         self.assertEqual (returned, expected)
 
     def testTwoCommands (self):
@@ -78,7 +76,17 @@ class TestRunCommands (unittest.TestCase):
         returned = run_commands.run (config)
         expected = run_commands.CommandOutput (**{'out':
                 [('zFirst', 'rhs1', 4),
-                 ('aLast', 'rhs2', 4)]})
+                 ('aLast', 'rhs2', 4)],
+                'max_lhs': 6, 'max_rhs': 4})
+        self.assertEqual (returned, expected)
+
+    def testUnderscoreToSpace (self):
+        config = {'Command_options': {'Timeout': 10},
+                'Info': {'Replace_underscore': ['echo', 'rhs']}}
+        returned = run_commands.run (config)
+        expected = run_commands.CommandOutput (**{'out':
+                [('Replace underscore', 'rhs', 3)],
+                'max_lhs': 18, 'max_rhs': 3})
         self.assertEqual (returned, expected)
 
 if __name__ == '__main__':

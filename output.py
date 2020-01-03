@@ -13,8 +13,10 @@ def show (config, info):
         if i[0] == '_centered_':
             size = info.max_lhs + len (separator) + info.max_rhs
             pad_size = size - i[2]
-            pad0 = ' ' * int (pad_size / 2)
-            pad1 = ' ' * (pad_size - len (pad0))
+            pad0 = ' '
+            pad0 *= info.max_lhs - int ((i[2] - len (separator) + 1) / 2)
+            pad1 = ' '
+            pad1 *= (pad_size - len (pad0))
             print ('x{pad0}{out}{pad1}x'.format 
                 (out = i[1],
                 pad0 = pad0,

@@ -2,7 +2,6 @@
 
 # Runs the commands from and populates the output list
 # This could be done in parallel, but is the overhead really worth it?
-# TODO: Create a return class, with lots of info
 import re
 import subprocess
 
@@ -26,8 +25,10 @@ class CommandOutput:
         return str (self.__dict__)
 
 def run (config):
+
     ret = CommandOutput ()
     ansi_escape = re.compile (r'\x1B[@-_][0-?]*[ -/]*[@-~]')
+
     for i in config['Info']:
         if isinstance (config['Info'][i], str):
             use_shell = True
@@ -40,12 +41,16 @@ def run (config):
         else:
             ret.err.append ("Invalid command '{}'".format (i))
             continue
+
         # Left hand side
         lhs = i.replace ('_', ' ')
-        if len (lhs) > ret.max_lhs: ret.max_lhs = len (lhs)
+        max_lhs = ret.max_lhs
         if lhs[0] == ' ':
             if lhs[-1] == ' ': lhs = '_centered_'
             else: lhs = ''
+        else:
+            if len (lhs.strip ()) > max_lhs: max_lhs = len (lhs.strip ())
+        
         # Right hand side
         try:
             out = (subprocess.run (config['Info'][i],
@@ -53,7 +58,7 @@ def run (config):
                     check = True,
                     shell = use_shell,
                     timeout = config['Command_options']['Timeout'])
-                    .stdout.decode ('utf-8')[:-1])
+                    .stdout.decode ('utf-8'))
             out = out.split ('\n')
             if out[-1] == '': out = out [:-1] # Remove empty last line
             for o in out:
@@ -61,8 +66,11 @@ def run (config):
                 if size > ret.max_rhs: ret.max_rhs = size
                 ret.out.append ((lhs, o, size))
                 lhs = ''
+            ret.max_lhs = max_lhs   # Only update this on success
         except subprocess.CalledProcessError:
-            ret.err.append ("Command '{}' returned a non-success code".format (i))
+            ret.err.append ("Command '{}' returned a non-success code".format
+                    (i))
         except subprocess.TimeoutExpired:
             ret.err.append ("Command '{}' not done after timeout".format (i))
+    
     return ret
