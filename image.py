@@ -1,6 +1,6 @@
 # image.py
-import re
-import subprocess
+import random
+from PIL import Image
 
 class ImageOutput:
 
@@ -16,42 +16,53 @@ class ImageOutput:
     def __str__ (self):
         return str (self.__dict__)
 
+
 def draw (config):
 
     ret = ImageOutput ()
-    ansi_escape = re.compile (r'\x1B\[[^m]*m')#(r'\x1B[@-_][0-?]*[ -/]*[@-~]')
 
-    if config['Image']['Type'] == 'Command':
+    if config['Image']['Type'] == 'Ascii':
         src = config['Image']['Src']
-        if isinstance (src, str):
-            use_shell = True
-        elif isinstance (src, list):
-            use_shell = False
-        else:
+        if isinstance (src, list):
+            src = random.choice (src)
+        elif not isinstance (src, str):
             ret.err.append ("Invalid image source '{}'".format (src))
             # TODO: try catch return default image
 
-        try:
-            out = (subprocess.run (src,
-                    capture_output = True,
-                    check = True,
-                    shell = use_shell,
-                    timeout = config['Command_options']['Timeout'])
-                    .stdout.decode ('utf-8'))
-            out = out.split ('\n')
-            if ansi_escape.sub ('', out[-1]) == '':
-                out = out [:-1] # Remove empty last line
-            for o in out:
-                width = len (ansi_escape.sub ('', o).rstrip ())
-                if width > ret.width: ret.width = width
-                ret.out.append ((o, width))
-                #ret.out.append ((ansi_escape.sub ('', o).rstrip (), width))
-                lhs = ''
+    img = Image.open (src)
 
-        except subprocess.CalledProcessError:
-            ret.err.append ("Command '{}' returned a non-success code".format
-                    (i))
-        except subprocess.TimeoutExpired:
-            ret.err.append ("Command '{}' not done after timeout".format (i))
+    # Remove alpha
+    if 'A' in img.mode or 'transparency' in img.info:
+        alpha = img.convert ('RGBA').split () [-1]
+        bg = Image.new ('RGBA', img.size,
+                tuple (config['Image']['Background']) + (255,))
+        bg.paste (img, mask=alpha)
+        img = bg
+
+    # Resize
+    if config['Image']['Resize'] == 'crop':
+        pass
+    elif config['Image']['Resize'] == 'contain':
+        height = config['Image']['Lines']
+        width = int (2 * img.size[0] * height / img.size[1])
+    elif config['Image']['Resize'] == 'cover':
+        pass
+    else:
+        ret.err.append ('Invalid resize type')
+    img = img.resize ((width, height))
+    ret.width = width
+
+    # Set ASCII Palette
+    pal = config['Image']['Palette']
+    img = img.convert (mode='L')
+    img = img.quantize (colors=len (pal), dither = Image.NONE)
+
+    # Output
+    data = list (img.getdata ())
+    for i in range (height):
+        out = ''
+        for j in range (width):
+            out += pal[ data[i*width + j] ]
+        ret.out.append (out)
 
     return ret

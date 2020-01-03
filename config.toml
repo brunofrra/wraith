@@ -8,8 +8,17 @@ Timeout = 10
 Separator = ': '
 
 [Image]
-Type = 'Command'
-Src = '/home/bruno/bin/gryphon.fish 10 | head -n -1 | tail -n 8'
+Type = 'Ascii'
+Src = './tux.png'
+
+Background = [0, 0, 0]
+Lines = 20
+#Palette = '█▓▒░ '
+Palette = '$8o:. '
+#Palette = '@%#*+=-:. '
+#Palette = '@BR*#$PX0woIcv:+!~"., '
+#Palette = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'. "
+Resize = 'contain'
 
 [Info]
 #_centered_test_ = ['echo', '1234567890 1234567890 1234567890 0987654321 0987654321 0987654321']

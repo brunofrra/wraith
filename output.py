@@ -6,15 +6,12 @@ def show (config, img, info):
 
     # Image
     for i in img.out:
-        print ('x{image_line}{pad}{clear}x {size} {width}'.format (
+        print ('x{image_line}{clear}x'.format (
                 clear = '\033[0m',
-                image_line = i[0],
-                pad = (' ' * (img.width - i[1])),
-                size = i[1],
-                width = img.width,
+                image_line = i,
                 ))
 
-    print ('#' * 50)
+    print ()
 
     # Info
     for i in info.out:
