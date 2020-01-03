@@ -15,9 +15,11 @@ conf_file = 'config.toml'
 
 config = load_conf.load (conf_file)
 
+img = image.draw (config)
+
 info = run_commands.run (config)
 
-output.show (config, info)
+output.show (config, img, info)
 
 # TODO:
 #   Handle errors
