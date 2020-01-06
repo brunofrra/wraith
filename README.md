@@ -25,5 +25,3 @@ From <https://www.etymonline.com/word/fetch> (*emphasis mine*):
 ## Known bugs
 
 * TOML Parser (external) has trouble handling triple quoted strings;
-
-* Still plenty of missing features, most notably, the image.

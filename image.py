@@ -52,20 +52,19 @@ def draw (config):
     # Resize
     if config['Image']['Resize'].lower () == 'none':
         height = img.size[1]
-        if ascii_type:
-            # A character is twice as tall
-            width = img.size[0] * 2
-        else:
-            width = img.size[0]
+        width = img.size[0]
     elif config['Image']['Resize'].lower () == 'crop':
         pass
     elif config['Image']['Resize'].lower () == 'contain':
         height = config['Image']['Lines']
-        width = int (2 * img.size[0] * height / img.size[1])
+        width = int (img.size[0] * height / img.size[1])
     elif config['Image']['Resize'].lower () == 'cover':
         pass
     else:
         ret.err.append ('Invalid resize type')
+    if ascii_type:
+        # A character is twice as tall
+        width = img.size[0] * 2
     img = img.resize ((width, height))
     ret.width = width
 

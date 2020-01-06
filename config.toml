@@ -43,4 +43,4 @@ Shell = ['fish', '--version']
 Extras_Separator = 1
 _Colors_ = ['echo', '-e', '\e[1;30;40m▄\e[31;41m▄\e[33;43m▄\e[32;42m▄\e[36;46m▄\e[34;44m▄\e[35;45m▄\e[37;47m▄\e[0m']
 
-Image = 'basename $WRAITH_IMAGE_SOURCE'
+#Image = 'basename $WRAITH_IMAGE_SOURCE'
