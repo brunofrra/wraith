@@ -8,17 +8,20 @@ Timeout = 10
 Separator = ': '
 
 [Image]
-Type = 'Ascii'
-Src = './tux.png'
+Type = 'ANSI'
+Src = './logo.png'
 
 Background = [0, 0, 0]
-Lines = 20
+#Background = [0, 0, 192]
+#Background = [255, 255, 255]
+Lines = 32
 #Palette = '█▓▒░ '
 Palette = '$8o:. '
 #Palette = '@%#*+=-:. '
 #Palette = '@BR*#$PX0woIcv:+!~"., '
 #Palette = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'. "
-Resize = 'contain'
+Resize = 'none'
+Force_Truecolor = true
 
 [Info]
 #_centered_test_ = ['echo', '1234567890 1234567890 1234567890 0987654321 0987654321 0987654321']
@@ -39,3 +42,5 @@ Shell = ['fish', '--version']
 
 Extras_Separator = 1
 _Colors_ = ['echo', '-e', '\e[1;30;40m▄\e[31;41m▄\e[33;43m▄\e[32;42m▄\e[36;46m▄\e[34;44m▄\e[35;45m▄\e[37;47m▄\e[0m']
+
+Image = 'basename $WRAITH_IMAGE_SOURCE'

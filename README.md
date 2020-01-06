@@ -1,4 +1,4 @@
-# Wraith
+# ![Logo](logo.png) Wraith
 
 **Wraith** is a fetch-like program. It's objective is to show system information
 mostly for screenshots.
