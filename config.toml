@@ -9,7 +9,9 @@ Separator = ': '
 
 [Image]
 Type = 'ANSI'
-Src = './logo.png'
+Src = ['./logo.png']
+#Type = 'TEXT'
+#Src = 'img.txt'
 
 Background = [0, 0, 0]
 #Background = [0, 0, 192]

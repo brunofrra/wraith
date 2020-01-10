@@ -17,30 +17,64 @@ class ImageOutput:
     def __str__ (self):
         return str (self.__dict__)
 
+    def __eq__ (self, other):
+        return self.__dict__ == other.__dict__
+
 
 def draw (config):
 
     ret = ImageOutput ()
 
+    # None
     if config['Image']['Type'] == 'None':
         return ret;
+
+    # Some
+    ascii_type = False
+    ansi_type = False
+    text_type = False
+    if config['Image']['Type'].upper() == 'ASCII':
+        ascii_type = True
+    elif config['Image']['Type'].upper() == 'ANSI':
+        ansi_type = True
+    elif config['Image']['Type'].upper() == 'TEXT':
+        text_type = True
+    src = config['Image']['Src']
+
+    # Chose image source
+    while len (src) > 0:
+        try_src = random.choice (src)
+        src.remove (try_src)
+        try:
+            if text_type:
+                with open (try_src):
+                    pass
+            else:
+                img = Image.open (try_src)
+            src = [try_src]
+            break
+        except Exception as e:
+            ret.err.append (('W', "Unable to open file '{}'".format (try_src)))
+
+    if len (src) > 0: # Success!
+        src = try_src
     else:
-        if config['Image']['Type'].upper() == 'ASCII':
-            ascii_type = True
-            ansi_type = False
-        elif config['Image']['Type'].upper() == 'ANSI':
-            ascii_type = False
-            ansi_type = True
-        src = config['Image']['Src']
-        if isinstance (src, list):
-            src = random.choice (src)
-        elif not isinstance (src, str):
-            ret.err.append ("Invalid image source '{}'".format (src))
-            # TODO: try catch return default image
+        ret.err.append (('E', 'Could not open any file'))
+        return ret
 
     os.putenv ('WRAITH_IMAGE_SOURCE', src)
-    img = Image.open (src)
 
+    # Text type
+    if text_type:
+        with open (src) as f:
+            txt = f.read ()
+        txt = txt.split ('\n')
+        ret.width = len (txt[0])
+        for line in txt:
+            ret.out.append (line)
+        return ret
+
+    # Image types
     # Remove alpha
     if 'A' in img.mode or 'transparency' in img.info:
         alpha = img.convert ('RGBA').split () [-1]

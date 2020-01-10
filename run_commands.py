@@ -6,7 +6,7 @@ import re
 import subprocess
 
 class CommandOutput:
-    
+
     def __init__ (self,
             err = None,
             max_lhs = 0,
@@ -39,7 +39,7 @@ def run (config):
                 ret.out.append (('','', 0))
             continue
         else:
-            ret.err.append ("Invalid command '{}'".format (i))
+            ret.err.append (('E', "Invalid command '{}'".format (i)))
             continue
 
         # Left hand side
@@ -50,7 +50,7 @@ def run (config):
             else: lhs = ''
         else:
             if len (lhs.strip ()) > max_lhs: max_lhs = len (lhs.strip ())
-        
+
         # Right hand side
         try:
             out = (subprocess.run (config['Info'][i],
@@ -68,9 +68,10 @@ def run (config):
                 lhs = ''
             ret.max_lhs = max_lhs   # Only update this on success
         except subprocess.CalledProcessError:
-            ret.err.append ("Command '{}' returned a non-success code".format
-                    (i))
+            ret.err.append (('E',
+                    "Command '{}' returned a non-success code".format (i)))
         except subprocess.TimeoutExpired:
-            ret.err.append ("Command '{}' not done after timeout".format (i))
-    
+            ret.err.append (('E',
+                    "Command '{}' not done after timeout".format (i)))
+
     return ret
