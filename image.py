@@ -87,18 +87,16 @@ def draw (config):
     if config['Image']['Resize'].lower () == 'none':
         height = img.size[1]
         width = img.size[0]
-    elif config['Image']['Resize'].lower () == 'crop':
-        pass
-    elif config['Image']['Resize'].lower () == 'contain':
+    elif config['Image']['Resize'].lower () == 'stretch':
         height = config['Image']['Lines']
-        width = int (img.size[0] * height / img.size[1])
-    elif config['Image']['Resize'].lower () == 'cover':
-        pass
+        width = config['Image']['Width']
     else:
-        ret.err.append ('Invalid resize type')
-    if ascii_type:
+        ret.err.append (('W', 'Invalid resize type'))
+        height = img.size [1]
+        width = img.size [0]
+    if ascii_type and not config['Image']['Resize'].lower () == 'stretch':
         # A character is twice as tall
-        width = img.size[0] * 2
+        width = width * 2
     img = img.resize ((width, height))
     ret.width = width
 

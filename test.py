@@ -5,7 +5,7 @@ import unittest
 
 class TestImage (unittest.TestCase):
 
-    def testAnsi (self):
+    def test_ansi (self):
         config = {'Image': {
                 'Background': [0, 0, 0],
                 'Force_Truecolor': True,
@@ -54,7 +54,7 @@ class TestImage (unittest.TestCase):
              ], 'width': 8})
         self.assertEqual (returned, expected)
 
-    def testAscii (self):
+    def test_ascii (self):
         config = {'Image': {
                 'Background': [0, 0, 0],
                 'Palette': '$8o:. ',
@@ -75,7 +75,7 @@ class TestImage (unittest.TestCase):
                 ], 'width': 16})
         self.assertEqual (returned, expected)
 
-    def testBackground (self):
+    def test_background (self):
         config = {'Image': {
                 'Background': [255, 255, 255],
                 'Palette': '$8o:. ',
@@ -96,7 +96,7 @@ class TestImage (unittest.TestCase):
                 ], 'width': 16})
         self.assertEqual (returned, expected)
 
-    def testFileError (self):
+    def test_file_error (self):
         config = {'Image': {
                 'Src': ['/dev/null/fail'],
                 'Type': 'ASCII',
@@ -108,7 +108,53 @@ class TestImage (unittest.TestCase):
                 ]})
         self.assertEqual (returned, expected)
 
-    def testText (self):
+    def test_no_image (self):
+        config = {'Image': {'Type': 'None'}}
+        returned = image.draw (config)
+        expected = image.ImageOutput ()
+        self.assertEqual (returned, expected)
+
+    def test_resize_none (self):
+        config = {'Image': {
+                'Background': [0, 0, 0],
+                'Palette': '$8o:. ',
+                'Resize': 'none',
+                'Src': ['logo-mini.png'],
+                'Type': 'ascii',
+                }}
+        returned = image.draw (config)
+        expected = image.ImageOutput (**{ 'out': [
+                '                ',
+                '     :8$8o..88: ',
+                ' .oo.    .oo.   ',
+                ' .::.    :88:   ',
+                '   .o8$$o: .oo. ',
+                '       :8$8o.   ',
+                '     .:oo88o.   ',
+                '                ',
+                ], 'width': 16})
+        self.assertEqual (returned, expected)
+
+    def test_resize_stretch (self):
+        config = {'Image': {
+                'Background': [0, 0, 0],
+                'Lines': 4,
+                'Palette': '$8o:. ',
+                'Resize': 'stretch',
+                'Src': ['logo-mini.png'],
+                'Type': 'ascii',
+                'Width': 8,
+                }}
+        returned = image.draw (config)
+        expected = image.ImageOutput (**{ 'out': [
+                ' . 8o.8 ',
+                ' $.o:$: ',
+                ' .o8$8o ',
+                '   o88  ',
+                ], 'width': 8})
+        self.assertEqual (returned, expected)
+
+    def test_text (self):
         config = {'Image': {'Type': 'text', 'Src': ['img.txt']}}
         returned = image.draw (config)
         expected = image.ImageOutput (**{'out': ['    ',
@@ -120,7 +166,7 @@ class TestImage (unittest.TestCase):
 
 class TestRunCommands (unittest.TestCase):
 
-    def testCenteredOutput (self):
+    def test_centered_output (self):
         config = {'Command_options': {'Timeout': 10},
                 'Info': {'_centered_output_': ['echo', 'rhs']}}
         returned = run_commands.run (config)
@@ -129,7 +175,7 @@ class TestRunCommands (unittest.TestCase):
                 'max_rhs': 3})
         self.assertEqual (returned, expected)
 
-    def testCommandFail (self):
+    def test_command_fail (self):
         config = {'Command_options': {'Timeout': 10},
                 'Info': {'lhs': ['false']}}
         returned = run_commands.run (config)
@@ -137,7 +183,7 @@ class TestRunCommands (unittest.TestCase):
                 "Command 'lhs' returned a non-success code")]})
         self.assertEqual (returned, expected)
 
-    def testCommandTimeout (self):
+    def test_command_timeout (self):
         config = {'Command_options': {'Timeout': 0.1},
                 'Info': {'lhs': ['sleep', '2']}}
         returned = run_commands.run (config)
@@ -145,7 +191,7 @@ class TestRunCommands (unittest.TestCase):
                 "Command 'lhs' not done after timeout")]})
         self.assertEqual (returned, expected)
 
-    def testIntCommand (self):
+    def test_int_command (self):
         config = {'Command_options': {'Timeout': 10},
                 'Info': {'lhs': 2}}
         returned = run_commands.run (config)
@@ -153,7 +199,7 @@ class TestRunCommands (unittest.TestCase):
                 [('', '', 0), ('', '', 0)]})
         self.assertEqual (returned, expected)
 
-    def testListCommand (self):
+    def test_list_command (self):
         config = {'Command_options': {'Timeout': 10},
                 'Info': {'lhs': ['echo', 'rhs']}}
         returned = run_commands.run (config)
@@ -161,7 +207,7 @@ class TestRunCommands (unittest.TestCase):
                 'max_lhs': 3, 'max_rhs': 3})
         self.assertEqual (returned, expected)
 
-    def testMultiLineCommand (self):
+    def test_multi_line_command (self):
         config = {'Command_options': {'Timeout': 10},
                 'Info': {'lhs': ['printf', 'foo\nbar']}}
         returned = run_commands.run (config)
@@ -170,15 +216,15 @@ class TestRunCommands (unittest.TestCase):
                 'max_lhs': 3, 'max_rhs': 3})
         self.assertEqual (returned, expected)
 
-    def testNoLhs (self):
+    def test_no_lhs (self):
         config = {'Command_options': {'Timeout': 10},
                 'Info': {'_no_lhs': ['echo', 'rhs']}}
         returned = run_commands.run (config)
         expected = run_commands.CommandOutput (**{'out': [('', 'rhs', 3)],
                 'max_lhs': 0, 'max_rhs': 3})
         self.assertEqual (returned, expected)
-    
-    def testStringCommand (self):
+
+    def test_string_command (self):
         config = {'Command_options': {'Timeout': 10},
                 'Info': {'lhs': 'echo rhs'}}
         returned = run_commands.run (config)
@@ -186,7 +232,7 @@ class TestRunCommands (unittest.TestCase):
                 'max_lhs': 3, 'max_rhs': 3})
         self.assertEqual (returned, expected)
 
-    def testTwoCommands (self):
+    def test_two_commands (self):
         config = {'Command_options': {'Timeout': 10},
                 'Info': {'zFirst': 'echo rhs1', 'aLast': ['echo', 'rhs2']}}
         returned = run_commands.run (config)
@@ -196,7 +242,7 @@ class TestRunCommands (unittest.TestCase):
                 'max_lhs': 6, 'max_rhs': 4})
         self.assertEqual (returned, expected)
 
-    def testUnderscoreToSpace (self):
+    def test_underscore_to_space (self):
         config = {'Command_options': {'Timeout': 10},
                 'Info': {'Replace_underscore': ['echo', 'rhs']}}
         returned = run_commands.run (config)
