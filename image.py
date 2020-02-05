@@ -45,6 +45,7 @@ def draw (config):
     while len (src) > 0:
         try_src = random.choice (src)
         src.remove (try_src)
+        try_src = os.path.expandvars (try_src)
         try:
             if text_type:
                 with open (try_src):

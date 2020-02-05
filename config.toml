@@ -9,7 +9,7 @@ Separator = ': '
 
 [Image]
 Type = 'ANSI'
-Src = ['./logo.png']
+Src = ['${WRAITH_PATH}/logo.png']
 
 Background = [0, 0, 0]
 #Lines = 4
@@ -22,23 +22,25 @@ Resize = 'none'
 Force_Truecolor = true
 
 [Info]
-#FIXME _centered_test_ = ['echo', '1234567890 1234567890 1234567890 0987654321 0987654321 0987654321']
+#FIXME _centered_test_ = ['printf', '1234567890 1234567890 1234567890 0987654321 0987654321 0987654321']
 Architecture = ['uname', '-m']
 
 Hardware_OS_Separator = 1
 Kernel = ['uname', '-sr']
 Operating_System = ['uname', '-o']
-Distribution = 'echo "`lsb_release -ds | tr -d \\"` `lsb_release -rs`"'
+Distribution = 'printf "`lsb_release -ds | tr -d \\"` `lsb_release -rs`"'
 
 OS_GUI_Separator = 1
 Display_Server = ['pacman', '-Q', 'xorg-server']
 Desktop_Environment = 'xfce4-session --version | grep -o "(X.*)" | tr -d "()"'
 
 GUI_Terminal_Separator = 1
-Terminal_Emulator = 'echo "QTerminal `qterminal --version 2>/dev/null`"'
+Terminal_Emulator = 'printf "QTerminal `qterminal --version 2>/dev/null`"'
 Shell = ['fish', '--version']
 
 Extras_Separator = 1
-_Colors_ = ['echo', '-e', '\e[1;30;40m▄\e[31;41m▄\e[33;43m▄\e[32;42m▄\e[36;46m▄\e[34;44m▄\e[35;45m▄\e[37;47m▄\e[0m']
+_Colors_ = ['printf', '\33%s\33%s\33%s\33%s\33%s\33%s\33%s\33%s\33%s',
+        '[1;30;40m▄', '[31;41m▄', '[33;43m▄', '[32;42m▄', '[36;46m▄',
+        '[34;44m▄', '[35;45m▄', '[37;47m▄', '[0m']
 
-Image = 'basename $WRAITH_IMAGE_SOURCE'
+#Wraith_environment_variables = 'env | grep WRAITH | sort'
