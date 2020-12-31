@@ -31,11 +31,11 @@ Operating_System = ['uname', '-o']
 Distribution = 'printf "`lsb_release -ds | tr -d \\"` `lsb_release -rs`"'
 
 OS_GUI_Separator = 1
-Display_Server = ['pacman', '-Q', 'xorg-server']
-Desktop_Environment = 'xfce4-session --version | grep -o "(X.*)" | tr -d "()"'
+#Display_Server = ['pacman', '-Q', 'xorg-server']
+Desktop_Environment = 'kdeinit5 --version | tail -n1'
 
 GUI_Terminal_Separator = 1
-Terminal_Emulator = 'printf "QTerminal `qterminal --version 2>/dev/null`"'
+Terminal_Emulator = ['konsole', '--version']
 Shell = ['fish', '--version']
 
 Extras_Separator = 1

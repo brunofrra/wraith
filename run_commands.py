@@ -67,6 +67,9 @@ def run (config):
                 ret.out.append ((lhs, o, size))
                 lhs = ''
             ret.max_lhs = max_lhs   # Only update this on success
+        except FileNotFoundError:
+            ret.err.append (('E',
+                    "Command '{}' not found".format (i)))
         except subprocess.CalledProcessError:
             ret.err.append (('E',
                     "Command '{}' returned a non-success code".format (i)))

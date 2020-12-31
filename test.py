@@ -183,6 +183,14 @@ class TestRunCommands (unittest.TestCase):
                 "Command 'lhs' returned a non-success code")]})
         self.assertEqual (returned, expected)
 
+    def test_command_not_found (self):
+        config = {'Command_options': {'Timeout': 10},
+                'Info': {'lhs': ['this_command_should_not_exist']}}
+        returned = run_commands.run (config)
+        expected = run_commands.CommandOutput (**{'err': [('E',
+                "Command 'lhs' not found")]})
+        self.assertEqual (returned, expected)
+
     def test_command_timeout (self):
         config = {'Command_options': {'Timeout': 0.1},
                 'Info': {'lhs': ['sleep', '2']}}

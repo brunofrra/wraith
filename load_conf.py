@@ -117,16 +117,23 @@ class Config:
             return str (self.__dict__)
 
 
-    def load (self,
-            Image = None,
+    def __init__ (self,
             Info = None,
-            **kwargs,
-            ):
-        self.image = Config.ImageConfig (**Image)
+            **kwargs):
+        if isinstance (Info, dict):
+            self.info = Info
+        else:
+            # TODO: Checar se precisa de avisar erro
+            self.info = {}
+        self.err = []
+        self.image = Config.ImageConfig (**kwargs['Image'])
 
-    def __init__ (self, **kwargs):
-        self.info = {}
-        self.load (**kwargs)
+        for i in self.image.err:
+            self.err.append (i)
+        #for i in self.info.err:
+        #    self.err.append (i)
+        del self.image.err
+        #del self.info.err
 
     def __str__ (self):
         ret = 'Image: {}'.format (str (self.image))
