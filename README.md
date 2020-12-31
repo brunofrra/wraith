@@ -5,6 +5,9 @@ mostly for screenshots.
 
 Inspired by <https://github.com/terroo/myfetch>. Created for learning purposes.
 
+For more documentation (currently aimed only at developers/contributors, not yet
+end users), see the [System Overview](./docs/overview.md).
+
 ## Etymology
 
 From <https://www.etymonline.com/word/fetch> (*emphasis mine*):
