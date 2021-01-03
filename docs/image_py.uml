@@ -1,6 +1,17 @@
 @startuml
+skinparam {
+    shadowing false
+    ActivityBackgroundColor aliceblue
+    ActivityBorderColor black
+    ActivityDiamondBackgroundColor aliceblue
+    ActivityDiamondBorderColor black
+    ArrowColor black
+    PartitionBorderColor darkblue
+    NoteBackgroundColor seashell
+    NoteBorderColor black
+    }
 
-:**draw (config)**|
+#lavender:**draw (config)**|
 
 :ret = ImageOutput ();
 note right

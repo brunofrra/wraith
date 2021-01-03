@@ -1,4 +1,12 @@
 @startuml
+skinparam {
+    shadowing false
+    ArrowColor blue
+    ComponentBackgroundColor aliceblue
+    ComponentBorderColor black
+    InterfaceBackgroundColor aliceblue
+    InterfaceBorderColor darkblue
+    }
 
 [wraith.py] as wraith
 () Config as wconf
@@ -39,7 +47,7 @@ wraith -left-( cmdout
 
 
 [test.py] as test
-test .down.> conf
+test .down.> wconf
 test .down.> imgout
 test .down.> cmdout
 

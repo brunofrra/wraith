@@ -61,7 +61,7 @@ TODO: Add an in depth explanation of each file.
 <img alt='UML Diagram of image.py' src='image_py.png' style='float: right'/>
 
 First, we define the return type: an object containing two lists and an
-integer (`Image_Output`). The `err` list will contain each as a tuple with
+integer (`ImageOutput`). The `err` list will contain each as a tuple with
 format (`error type`, `error message`), where `error type` is a single
 character, either of `W` for warnings or `E` for errors and `error message` is
 a descriptive message. The output will be stored in the list `out`, composed of
@@ -75,7 +75,7 @@ includes all the configurations loaded and everything needed to decide how to
 display the image.
 
 The first step is checking if `Image.Type` is `NONE`, in which case it simply
-returns an empty `Image_Output` object. Otherwise it splits the return type into
+returns an empty `ImageOutput` object. Otherwise it splits the return type into
 3 booleans for easier processing. While the diagram above shows conditions
 testing `Image.Type` directly, they instead check these booleans: `ansi_type`,
 `ascii_type` and `text_type`.
@@ -101,4 +101,4 @@ ready, it begins the final processing.
 
 For every line and then column, generate the corresponding character (with
 color sequence, if applicable) and string them together into the full line.
-Append it to ret.out and then return it. Done.
+Append it to `ret.out` and then return it. Done.
