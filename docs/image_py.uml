@@ -1,0 +1,112 @@
+@startuml
+
+:**draw (config)**|
+
+:ret = ImageOutput ();
+note right
+    **ImageOutput**
+    ----
+    err: list
+    out: list
+    width: int
+    ----
+endnote
+
+if (Image.Type?) is (none) then
+    #palegreen:Return empty;
+    end
+endif
+
+:Check config for ASCII/ANSI/TEXT type;
+
+repeat
+
+    :Get random source from list;
+
+    if (Loaded successfully?) then (yes)
+
+        break
+
+    else (no)
+
+        #wheat:Log warning or ret.err;
+
+        if (Has tried all the sources?) then (yes)
+            #wheat:Log error on ret.err;
+            #pink:Return error log;
+            end
+        else (no)
+            ' TODO: Try to rewrite this?
+        endif
+
+    endif
+
+repeat while (More sources?) is (yes)
+
+:Save source filename to environment variable;
+
+if (Image.Type?) then (text)
+    :Load file;
+    :Save individual lines to ret.out;
+    :Save length of first line to ret.width;
+    note left
+        **FIXME**
+        Assumes all
+        lines have
+        the same
+        length!
+    endnote
+    #palegreen:Return text;
+    end
+endif
+
+if (The image has alpha?) then
+    :Remove alpha to Image.Background color;
+endif
+
+:Resize image;
+note right
+    Currently supported
+    "none" and "stretch".
+    TODO: Add more
+endnote
+
+if (Image.Type?) then (ascii)
+
+    :Set palette to Image.Palette;
+    :Quantize colors to its length;
+
+else (ansi)
+
+    if (Image.Force_Truecolor?) then (true)
+        :Set COLOR_TERM;
+    endif
+
+endif
+
+partition "Process image proper" {
+
+    :For every line/column;
+
+    if (Image.Type?) then (ascii)
+        :Use character from palette;
+    else (ansi)
+        if (Line is even?) then (odd)
+            :Take two lines;
+        else (even)
+            :Skip;
+        endif
+        :Set colors;
+        :Insert upper block character;
+    endif
+
+    :Append it at ret.out;
+
+    :End for;
+    }
+
+#palegreen:Return image rendered into text;
+
+end
+
+@enduml

@@ -1,0 +1,46 @@
+@startuml
+
+[wraith.py] as wraith
+() Config as wconf
+() ImageOutput as wimgout
+() CommandOutput as wcmdout
+wraith -left- wconf
+wraith -down- wimgout
+wraith -down- wcmdout
+
+
+[image.py] as image
+() ImageOutput as imgout
+image -down- imgout
+
+image -down-( wconf
+wraith -up-( imgout
+
+
+[load_conf.py] as load
+() Config as conf
+load -left- conf
+
+wraith -right-( conf
+
+
+[output.py] as out
+out -up-( wconf
+out -up-( wcmdout
+out -up-( wimgout
+
+
+[run_commands.py] as rc
+() CommandOutput as cmdout
+rc -down- cmdout
+
+rc -right-( wconf
+wraith -left-( cmdout
+
+
+[test.py] as test
+test .down.> conf
+test .down.> imgout
+test .down.> cmdout
+
+@enduml
